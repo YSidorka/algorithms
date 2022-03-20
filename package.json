@@ -1,0 +1,21 @@
+{
+  "name": "algorithms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "lite-server": "lite-server",
+    "start": "nodemon --inspect-brk app.js",
+    "debug": "nodemon --inspect app.js",
+    "http": "http-server ./ -a localhost -p 3000 -o",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^0.13.0",
+    "jest": "^27.5.1",
+    "lite-server": "^2.6.1",
+    "nodemon": "^2.0.15"
+  }
+}
