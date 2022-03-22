@@ -9,6 +9,39 @@ function createNDimArrayRecursion(arrayParams) {
   return result;
 }
 
+function getNOD(array) {
+  try {
+    let _array = array;
+    let min = Math.min(..._array);
+    if (!_array.length || !min || (min <= 0)) return null;
+
+    while (_array.length) {
+      const tmpArr = [];
+      let tmpMin = min;
+
+      _array.forEach((value) => {
+        const mod = value % min;
+        if (mod > 0) {
+          if (tmpMin > mod) tmpMin = mod;
+          tmpArr.push(mod);
+        }
+      });
+
+      // update minimum
+      if (tmpArr.length) {
+        tmpArr.push(min);
+        min = tmpMin;
+      }
+      _array = tmpArr;
+    }
+
+    return min;
+  } catch(err) {
+    return null;
+  }
+}
+
 module.exports = {
-  createNDimArrayRecursion
+  createNDimArrayRecursion,
+  getNOD
 }
