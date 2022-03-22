@@ -1,0 +1,17 @@
+{
+  "name": "test 01 unlim",
+  "input": {
+    "weight": 9,
+    "limit": "unlim",
+    "items": [
+      { "weight": 4, "cost": 3 },
+      { "weight": 2, "cost": 1 },
+      { "weight": 3, "cost": 4 }
+    ]
+  },
+  "output": [
+    [ 0, 0, 1, 1, 2, 2, 3, 3, 4, 4 ],
+    [ 0, 0, 1, 4, 4, 5, 8, 8, 9, 12],
+    [ 0, 0, 1, 4, 4, 5, 8, 8, 9, 12]
+  ]
+}
