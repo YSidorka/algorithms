@@ -1,0 +1,27 @@
+{
+  "name": "simplex 01",
+  "input": {
+    "max": "cost",
+    "items": [
+      { "id": "bug", "cost": 2, "head": 1, "legs": 6, "battery": 1 },
+      { "id": "dog", "cost": 3, "head": 1, "legs": 3, "battery": 2 }
+    ],
+    "resources": {
+      "head": 100,
+      "legs": 360,
+      "battery": 120
+    }
+  },
+  "output": {
+    "result": 200,
+    "items": {
+      "bug": 40,
+      "dog": 40
+    },
+    "resources": {
+      "head": 20,
+      "legs": 0,
+      "battery": 0
+    }
+  }
+}

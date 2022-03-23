@@ -1,0 +1,53 @@
+{
+  "name": "simplex 03 (Hollywood)",
+  "input": {
+    "max": "cost",
+    "items": [
+      {
+        "id": "action",
+        "cost": 4,
+        "actionActor": 1,
+        "beautyActor": 1
+      },
+      {
+        "id": "comedy",
+        "cost": 3,
+        "comedyActor": 2,
+        "beautyActor": 1
+      },
+      {
+        "id": "musical",
+        "cost": 2,
+        "beautyActor": 1,
+        "dramaActor": 1
+      },
+      {
+        "id": "drama",
+        "cost": 1,
+        "beautyActor": 1,
+        "dramaActor": 2
+      }
+    ],
+    "resources": {
+      "actionActor": 8,
+      "comedyActor": 10,
+      "beautyActor": 25,
+      "dramaActor": 15
+    }
+  },
+  "output": {
+    "result": 71,
+    "items": {
+      "action": 8,
+      "comedy": 5,
+      "musical": 12,
+      "drama": 0
+    },
+    "resources": {
+      "actionActor": 0,
+      "comedyActor": 0,
+      "beautyActor": 0,
+      "dramaActor": 3
+    }
+  }
+}

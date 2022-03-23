@@ -1,0 +1,29 @@
+{
+  "name": "simplex 02 (sunset avenue)",
+  "input": {
+    "max": "cost",
+    "items": [
+      { "id": "table", "cost": 2, "woodPlank": 4, "screw": 6, "pins": 4 },
+      { "id": "monkeybox", "cost": 4, "woodPlank": 3, "screw": 16, "pins": 1 },
+      { "id": "cupboard", "cost": 3, "woodPlank": 6, "screw": 8, "pins": 10 }
+    ],
+    "resources": {
+      "woodPlank": 30,
+      "screw": 256,
+      "pins": 9
+    }
+  },
+  "output": {
+    "result": 36,
+    "items": {
+      "cupboard": 0,
+      "monkeybox": 9,
+      "table": 0
+    },
+    "resources": {
+      "woodPlank": 3,
+      "screw": 112,
+      "pins": 0
+    }
+  }
+}

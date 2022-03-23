@@ -1,10 +1,10 @@
-function createNDimArrayRecursion(arrayParams) {
-  if (!Array.isArray(arrayParams) || arrayParams.length <= 0) return null;
+function createNDimArrayRecursion(arrayParams, defaultValue = null) {
+  if (!Array.isArray(arrayParams) || arrayParams.length <= 0) return defaultValue;
   const size = arrayParams[0];
   const params = arrayParams.slice(1);
   const result = [];
   for (let i = 0; i < size; i += 1) {
-    result.push(createNDimArrayRecursion(params));
+    result.push(createNDimArrayRecursion(params, defaultValue));
   }
   return result;
 }
@@ -42,6 +42,6 @@ function getNOD(array) {
 }
 
 module.exports = {
-  createNDimArrayRecursion,
+  createNDimArray: createNDimArrayRecursion,
   getNOD
 }

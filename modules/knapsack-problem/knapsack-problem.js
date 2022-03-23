@@ -1,4 +1,4 @@
-const { createNDimArrayRecursion } = require('../utils/utils');
+const { createNDimArray } = require('../utils/utils');
 
 function excludeCase(resultTable, itemIndex, weightIndex) {
   let result = 0;
@@ -33,7 +33,7 @@ function solution(inputData) {
     const { weight, limit, items } = inputData;
 
     items.sort((A, B) => (A.weight >= B.weight) ? 1 : -1);
-    let resultTable = createNDimArrayRecursion([items.length, weight + 1]);
+    let resultTable = createNDimArray([items.length, weight + 1]);
 
     resultTable.forEach((tableRow, itemIndex) => {
       tableRow.forEach((weight, weightIndex) => {
