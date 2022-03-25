@@ -1,0 +1,48 @@
+{
+  "name": "simplex intuit.ru (05 test)",
+  "input": {
+    "max": "cost",
+    "items": [
+      {
+        "id": "product 1",
+        "cost": 3,
+        "res_1": 1,
+        "res_2": 3,
+        "res_3": 3
+      },
+      {
+        "id": "product 2",
+        "cost": 2,
+        "res_1": 2,
+        "res_2": 1,
+        "res_3": 2
+      },
+      {
+        "id": "product 3",
+        "cost": 5,
+        "res_1": 3,
+        "res_2": 5,
+        "res_3": 1
+      }
+    ],
+    "resources": {
+      "res_1": 30,
+      "res_2": 55,
+      "res_3": 9
+    }
+  },
+  "output": {
+    "result": 45,
+    "items": {
+      "product 1": 0,
+      "product 2": 0,
+      "product 3": 9
+    },
+    "resources": {
+      "res_1": 3,
+      "res_2": 10,
+      "res_3": 0
+    }
+  }
+
+}
