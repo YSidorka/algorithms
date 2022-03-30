@@ -10,7 +10,8 @@ function excludeCase(resultTable, itemIndex, weightIndex) {
 function include01Case(resultTable, itemIndex, weightIndex, item) {
   let result = 0;
   const deltaWeight = weightIndex - item.weight;
-  if ((deltaWeight >= 0)) { // could be added
+  if (deltaWeight >= 0) {
+    // could be added
     result = item.cost;
     if (itemIndex >= 1) result += resultTable[itemIndex - 1][deltaWeight];
   }
@@ -20,7 +21,8 @@ function include01Case(resultTable, itemIndex, weightIndex, item) {
 function includeUnboundedCase(resultTable, itemIndex, weightIndex, item) {
   let result = 0;
   const deltaWeight = weightIndex - item.weight;
-  if ((deltaWeight >= 0)) { // could be added
+  if (deltaWeight >= 0) {
+    // could be added
     result = item.cost;
     result += resultTable[itemIndex][deltaWeight];
   }
@@ -32,12 +34,11 @@ function solution(inputData) {
     let result;
     const { weight, limit, items } = inputData;
 
-    items.sort((A, B) => (A.weight >= B.weight) ? 1 : -1);
+    items.sort((A, B) => (A.weight >= B.weight ? 1 : -1));
     let resultTable = createNDimArray([items.length, weight + 1]);
 
     resultTable.forEach((tableRow, itemIndex) => {
       tableRow.forEach((weight, weightIndex) => {
-
         let exclude;
         let include;
 
@@ -61,13 +62,12 @@ function solution(inputData) {
     // result = resultTable[items.length - 1][weight];
     result = resultTable;
     return result;
-
   } catch (err) {
-    console.log(err.message)
+    console.log(err.message);
     return null;
   }
 }
 
 module.exports = {
   solution
-}
+};

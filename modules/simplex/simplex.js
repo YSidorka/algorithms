@@ -8,9 +8,10 @@ function inputValidator(inputData) {
     // check items
     if (!Array.isArray(items) || items.length <= 0) throw new Error('Invalid items');
     items.forEach((item) => {
-      if (!Object.prototype.hasOwnProperty.call(item, max)) throw new Error(`Item id (${item.id}): cannot found maximize param`);
+      if (!Object.prototype.hasOwnProperty.call(item, max))
+        throw new Error(`Item id (${item.id}): cannot found maximize param`);
       if (item[max] <= 0) throw new Error(`Item id (${item.id}): invalid maximize param`);
-    })
+    });
 
     // check resources
     if (Object.keys(resources).length <= 0) throw new Error('Invalid resources');
@@ -41,13 +42,14 @@ function setInput(inputData) {
    */
   // result row
   const resultRow = createNDimArray([items.length + resTypesCount + 1], 0);
-  items.forEach((item, index) => { resultRow[index] = -item[max] });
+  items.forEach((item, index) => {
+    resultRow[index] = -item[max];
+  });
   resultRow[resultRow.length - 1] = 0;
 
   // solution MATRIX = [resource rule][ item0, ..., itemN, res0, ..., resN, 'FREE_EL' ]
-  const matrix = createNDimArray([resTypesCount, (items.length + resTypesCount + 1)], 0);
+  const matrix = createNDimArray([resTypesCount, items.length + resTypesCount + 1], 0);
   matrix.forEach((row, i) => {
-
     // resKeys[i] -> name of resource
 
     // set resources matrix values
@@ -62,7 +64,6 @@ function setInput(inputData) {
 
     // set free element
     matrix[i][row.length - 1] = resources[resKeys[i]];
-
   });
 
   return { resultRow, matrix, resKeys };
@@ -92,12 +93,12 @@ function setOutput(resultRow, matrix, items, resKeys) {
       if (colIndex < items.length) _items[items[colIndex].id] = 0;
       if (colIndex >= items.length) _resources[resKeys[colIndex - items.length]] = 0;
     }
-  })
+  });
   return {
     result: _result,
     items: _items,
     resources: _resources
-  }
+  };
 }
 
 function isBasis(matrix, col) {
@@ -111,14 +112,14 @@ function isBasis(matrix, col) {
       i += 1;
     }
     return result;
-  } catch(err) {
+  } catch (err) {
     return false;
   }
 }
 
-function getMinIndex(array){
+function getMinIndex(array) {
   let min = array[0];
-  let minIndex = 0
+  let minIndex = 0;
 
   array.forEach((item, index) => {
     if (min > item) {
@@ -129,7 +130,7 @@ function getMinIndex(array){
   return minIndex;
 }
 
-function getFreeElArray(matrix, basisIndex){
+function getFreeElArray(matrix, basisIndex) {
   const result = matrix.map((row) => {
     let value = row[row.length - 1] / row[basisIndex];
     if (value < 0) value = Infinity;
@@ -139,13 +140,13 @@ function getFreeElArray(matrix, basisIndex){
 }
 
 function rowFactorSimplify(row, k) {
-  const result = row.map((value) => value / k );
+  const result = row.map((value) => value / k);
   return result;
 }
 
 function updateRowWithBasisRow(basisRow, row, basisIndex) {
   const K = -row[basisIndex];
-  const result = row.map((value, index) => (value + basisRow[index] * K));
+  const result = row.map((value, index) => value + basisRow[index] * K);
   return result;
 }
 
@@ -155,7 +156,7 @@ function solution(inputData) {
     let { resultRow, matrix, resKeys } = setInput(inputData);
 
     let newBasisColIndex = getMinIndex(resultRow);
-    let moveOnFlag = (resultRow[newBasisColIndex] < 0);
+    let moveOnFlag = resultRow[newBasisColIndex] < 0;
 
     while (moveOnFlag) {
       moveOnFlag = false;
@@ -164,7 +165,10 @@ function solution(inputData) {
       const newBasisRowIndex = getMinIndex(freeElArray);
 
       // simplify new basis row
-      matrix[newBasisRowIndex] = rowFactorSimplify(matrix[newBasisRowIndex], matrix[newBasisRowIndex][newBasisColIndex]);
+      matrix[newBasisRowIndex] = rowFactorSimplify(
+        matrix[newBasisRowIndex],
+        matrix[newBasisRowIndex][newBasisColIndex]
+      );
 
       // update matrix
       matrix.forEach((row, index) => {
@@ -174,25 +178,29 @@ function solution(inputData) {
       });
 
       // move on criteria
-      const tmpResultRow = updateRowWithBasisRow(matrix[newBasisRowIndex], resultRow, newBasisColIndex);
+      const tmpResultRow = updateRowWithBasisRow(
+        matrix[newBasisRowIndex],
+        resultRow,
+        newBasisColIndex
+      );
       const lastIndex = resultRow.length - 1;
 
       if (tmpResultRow[lastIndex] > resultRow[lastIndex]) {
         // update resultRow
         resultRow = tmpResultRow;
         newBasisColIndex = getMinIndex(resultRow);
-        moveOnFlag = (resultRow[newBasisColIndex] < 0);
+        moveOnFlag = resultRow[newBasisColIndex] < 0;
       }
     }
 
     result = setOutput(resultRow, matrix, inputData.items, resKeys);
     return result;
   } catch (err) {
-    console.log(err.message)
+    console.log(err.message);
     return null;
   }
 }
 
 module.exports = {
   solution
-}
+};

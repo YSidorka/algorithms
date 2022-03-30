@@ -1,0 +1,7 @@
+node_modules
+coverage
+deployment
+docs
+**/*.min.css
+**/*.min.js
+**/*.hbs

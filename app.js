@@ -1,6 +1,6 @@
-// console.log(Number.MAX_VALUE);
-// console.log(Number.MAX_SAFE_INTEGER);
+console.log(Number.MAX_VALUE);
+console.log(Number.MAX_SAFE_INTEGER);
 
-const test = require('./modules/simplex/tests/intuit 04.json');
-const { solution } = require('./modules/simplex/simplex');
+const test = require('./modules/transport-problem/tests/01.json');
+const { solution } = require('./modules/transport-problem/transport');
 console.log(solution(test.input));

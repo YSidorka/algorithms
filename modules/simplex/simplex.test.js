@@ -5,7 +5,7 @@ const { solution } = require('./simplex');
 const tests = [];
 
 fs.readdirSync(path.join(__dirname, 'tests')).forEach((file) => {
-  if (!file.startsWith('_')) tests.push(file)
+  if (!file.startsWith('_')) tests.push(file);
 });
 
 tests.forEach((item) => {
@@ -14,6 +14,3 @@ tests.forEach((item) => {
     expect(solution(testCase.input)).toStrictEqual(testCase.output);
   });
 });
-
-
-

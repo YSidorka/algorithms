@@ -13,7 +13,7 @@ function getNOD(array) {
   try {
     let _array = array;
     let min = Math.min(..._array);
-    if (!_array.length || !min || (min <= 0)) return null;
+    if (!_array.length || !min || min <= 0) return null;
 
     while (_array.length) {
       const tmpArr = [];
@@ -36,12 +36,31 @@ function getNOD(array) {
     }
 
     return min;
-  } catch(err) {
+  } catch (err) {
     return null;
   }
 }
 
+function arraySum(array) {
+  let result = 0;
+  array.forEach((item) => (result += item));
+  return result;
+}
+
+function cloneObj(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+function swap(a, b) {
+  let tmp = a;
+  a = b;
+  b = tmp;
+}
+
 module.exports = {
   createNDimArray: createNDimArrayRecursion,
-  getNOD
-}
+  getNOD,
+  arraySum,
+  cloneObj,
+  swap
+};

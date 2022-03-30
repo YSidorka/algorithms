@@ -9,7 +9,8 @@ function excludeCase(resultTable, itemIndex, weightIndex) {
 function includeUnboundedCase(resultTable, itemIndex, weightIndex, item) {
   let result = item.cost;
   const deltaWeight = weightIndex - item.weight;
-  if ((deltaWeight >= 0)) { // could be added
+  if (deltaWeight >= 0) {
+    // could be added
     result += resultTable[itemIndex][deltaWeight];
   }
   return result;
@@ -24,14 +25,13 @@ function setInput(inputData) {
       return {
         ...item,
         weight: Math.floor(item.weight / nod)
-      }
+      };
     });
   }
   return { ...inputData, weight, items };
 }
 
-function setOutput(resultTable, sortedItems, weight){
-
+function setOutput(resultTable, sortedItems, weight) {
   // RETURN VALUE ONLY
   // return resultTable[resultTable.length - 1][resultTable[0].length - 1];
 
@@ -45,15 +45,18 @@ function setOutput(resultTable, sortedItems, weight){
   while (rowIndex >= 0) {
     if (colIndex <= 0) break;
     while (colIndex > 0) {
-      if ((rowIndex >= 1 ) && (resultTable[rowIndex][colIndex] === resultTable[rowIndex - 1][colIndex])) {
+      if (
+        rowIndex >= 1 &&
+        resultTable[rowIndex][colIndex] === resultTable[rowIndex - 1][colIndex]
+      ) {
         // exclude case
-        rowIndex-=1;
+        rowIndex -= 1;
       } else {
         // include case
         const caseName = sortedItems[rowIndex].name;
         if (!result[caseName]) result[caseName] = 0;
         result[caseName] += 1;
-        colIndex-= sortedItems[rowIndex].weight;
+        colIndex -= sortedItems[rowIndex].weight;
       }
     }
   }
@@ -66,14 +69,14 @@ function solution(inputData) {
     let result;
     const { weight, limit, items } = setInput(inputData);
 
-    items.sort((A, B) => (A.weight >= B.weight) ? 1 : -1);
+    items.sort((A, B) => (A.weight >= B.weight ? 1 : -1));
     let resultTable = createNDimArray([items.length, weight + 1]);
 
     resultTable.forEach((tableRow, itemIndex) => {
       tableRow.forEach((weight, weightIndex) => {
         let exclude;
         let include;
-        if ((itemIndex === 0) && (weightIndex === 0)) {
+        if (itemIndex === 0 && weightIndex === 0) {
           tableRow[weightIndex] = 0;
           return;
         }
@@ -89,11 +92,11 @@ function solution(inputData) {
     result = setOutput(resultTable, items, weight);
     return result;
   } catch (err) {
-    console.log(err.message)
+    console.log(err.message);
     return null;
   }
 }
 
 module.exports = {
   solution
-}
+};

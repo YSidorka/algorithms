@@ -5,9 +5,8 @@ const { solution } = require('./minimize-knapsack');
 const tests = [];
 
 fs.readdirSync(path.join(__dirname, 'tests')).forEach((file) => {
-  if (!file.startsWith('_')) tests.push(file)
+  if (!file.startsWith('_')) tests.push(file);
 });
-
 
 tests.forEach((item) => {
   const testCase = require(`./tests/${item}`);
@@ -15,6 +14,3 @@ tests.forEach((item) => {
     expect(solution(testCase.input)).toStrictEqual(testCase.output);
   });
 });
-
-
-

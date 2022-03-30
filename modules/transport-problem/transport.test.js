@@ -1,6 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-const { solution } = require('./knapsack-problem');
+const { solution } = require('./transport');
+
+/*
+ client (needs) -> columns
+ store (has) -> rows
+ */
 
 const tests = [];
 
