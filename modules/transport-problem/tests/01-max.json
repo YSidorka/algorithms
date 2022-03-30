@@ -1,0 +1,21 @@
+{
+  "name": "transport 01(max)",
+  "input": {
+    "type": "max",
+    "hasRes": [30, 90, 50],
+    "needRes": [70, 60, 30],
+    "costMatrix": [
+      [8, 4, 5],
+      [3, 7, 2],
+      [1, 4, 6]
+    ]
+  },
+  "output": {
+    "result": 940,
+    "resMatrix": [
+      [30, 0, 0, 0],
+      [30, 60, 0, 0],
+      [10, 0, 30, 10]
+    ]
+  }
+}

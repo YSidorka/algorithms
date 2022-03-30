@@ -15,7 +15,7 @@ function setInput(data) {
     return null;
   }
 
-  const { hasRes: inputArr, needRes: outputArr, costMatrix } = cloneObj(data);
+  const { hasRes: inputArr, needRes: outputArr, costMatrix, type } = cloneObj(data);
 
   // reverse matrix
   let matrix = createNDimArray([costMatrix[0].length, costMatrix.length]);
@@ -45,7 +45,8 @@ function setInput(data) {
     inputSum,
     outputArr,
     outputSum,
-    costMatrix: matrix
+    costMatrix: matrix,
+    type: type === 'max' ? type : 'min'
   };
 }
 
@@ -96,7 +97,68 @@ function sumMatrix(resultArr, costMatrix) {
   return result;
 }
 
-function getNextOptimum(resultArr, costMatrix) {
+function getNextOptimum(type, resultArr, costMatrix) {
+  if (type === 'max') {
+    return getNextOptimum_MAX(resultArr, costMatrix);
+  } else {
+    return getNextOptimum_MIN(resultArr, costMatrix);
+  }
+}
+
+function getNextOptimum_MAX(resultArr, costMatrix) {
+  const kInputArr = createNDimArray([costMatrix[0].length]); // row of K  (each col)
+  const kOutputArr = createNDimArray([costMatrix.length]); // column of K (each row)
+
+  // set K for input & output
+  let list = [...resultArr];
+  let listPos = 0;
+  const firstItem = list[0];
+  const maxPotencial = costMatrix[firstItem.row][firstItem.col];
+  kInputArr[list[0].col] = maxPotencial;
+
+  while (listPos < list.length) {
+    const item = list[listPos];
+    // if col & row unknown - put item to the end of queue
+    if (kInputArr[item.col] === null && kOutputArr[item.row] === null) list.push(item);
+
+    // if row known - K could be calculated
+    if (kInputArr[item.col] === null && kOutputArr[item.row] !== null) {
+      kInputArr[item.col] = maxPotencial - costMatrix[item.row][item.col] - kOutputArr[item.row];
+    }
+
+    // if col known - K could be calculated
+    if (kInputArr[item.col] !== null && kOutputArr[item.row] === null) {
+      kOutputArr[item.row] = maxPotencial - costMatrix[item.row][item.col] - kInputArr[item.col];
+    }
+    listPos += 1;
+  }
+
+  // K matrix
+  const kMatrix = createNDimArray([costMatrix.length, costMatrix[0].length]);
+  resultArr.forEach((item) => (kMatrix[item.row][item.col] = item.value));
+
+  let optimumObj = null; // maxDelta = kMatrix[i][j] vs costMatrix[i][j];
+
+  kMatrix.forEach((row, i) => {
+    row.forEach((item, j) => {
+      if (item === null) {
+        kMatrix[i][j] = kOutputArr[i] + kInputArr[j];
+        const delta = kMatrix[i][j] - (maxPotencial - costMatrix[i][j]);
+        if (delta > 0) {
+          if (!optimumObj) optimumObj = { value: delta, row: i, col: j };
+          if (delta > optimumObj.value) {
+            optimumObj.value = delta;
+            optimumObj.row = i;
+            optimumObj.col = j;
+          }
+        }
+      }
+    });
+  });
+  return optimumObj;
+}
+
+function getNextOptimum_MIN(resultArr, costMatrix) {
   const kInputArr = createNDimArray([costMatrix[0].length]); // row of K  (each col)
   const kOutputArr = createNDimArray([costMatrix.length]); // column of K (each row)
 
@@ -104,17 +166,18 @@ function getNextOptimum(resultArr, costMatrix) {
   let list = [...resultArr];
   let listPos = 0;
   kInputArr[list[0].col] = 0;
+
   while (listPos < list.length) {
     const item = list[listPos];
     // if col & row unknown - put item to the end of queue
     if (kInputArr[item.col] === null && kOutputArr[item.row] === null) list.push(item);
 
-    // if row known - K could be caltulated
+    // if row known - K could be calculated
     if (kInputArr[item.col] === null && kOutputArr[item.row] !== null) {
       kInputArr[item.col] = costMatrix[item.row][item.col] - kOutputArr[item.row];
     }
 
-    // if col known - K could be caltulated
+    // if col known - K could be calculated
     if (kInputArr[item.col] !== null && kOutputArr[item.row] === null) {
       kOutputArr[item.row] = costMatrix[item.row][item.col] - kInputArr[item.col];
     }
@@ -125,7 +188,7 @@ function getNextOptimum(resultArr, costMatrix) {
   const kMatrix = createNDimArray([costMatrix.length, costMatrix[0].length]);
   resultArr.forEach((item) => (kMatrix[item.row][item.col] = item.value));
 
-  let maxDelta = null;
+  let optimumObj = null; // maxDelta = kMatrix[i][j] vs costMatrix[i][j];
 
   kMatrix.forEach((row, i) => {
     row.forEach((item, j) => {
@@ -133,17 +196,17 @@ function getNextOptimum(resultArr, costMatrix) {
         kMatrix[i][j] = kOutputArr[i] + kInputArr[j];
         const delta = kMatrix[i][j] - costMatrix[i][j];
         if (delta > 0) {
-          if (!maxDelta) maxDelta = { value: delta, row: i, col: j };
-          if (delta > maxDelta.value) {
-            maxDelta.value = delta;
-            maxDelta.row = i;
-            maxDelta.col = j;
+          if (!optimumObj) optimumObj = { value: delta, row: i, col: j };
+          if (delta > optimumObj.value) {
+            optimumObj.value = delta;
+            optimumObj.row = i;
+            optimumObj.col = j;
           }
         }
       }
     });
   });
-  return maxDelta;
+  return optimumObj;
 }
 
 function isEqualPonts(a, b) {
@@ -278,14 +341,14 @@ function getLoop(resultArr, index) {
 function solution(inputData) {
   try {
     let result;
-    let { inputArr, outputArr, costMatrix } = setInput(inputData);
+    let { inputArr, outputArr, costMatrix, type } = setInput(inputData);
 
     // basic solution
     let resultArr = northWestCorner([...inputArr], [...outputArr]);
     let resultSum = sumMatrix(resultArr, costMatrix);
 
     // get item for optimization
-    let nextOptimum = getNextOptimum(resultArr, costMatrix);
+    let nextOptimum = getNextOptimum(type, resultArr, costMatrix);
     let moveOnFlag = !!nextOptimum;
 
     while (moveOnFlag) {
@@ -297,11 +360,16 @@ function solution(inputData) {
       // set "+" & "-" for loop elements
       // get min value of "-" elements
       // get indexes at resultArr
-      let min = Number.MAX_SAFE_INTEGER;
+      let min = null;
       loopArr.forEach((item, index) => {
         item.type = index % 2 === 0 ? '+' : '-';
         item.index = resultArr.findIndex((resultItem) => isEqualPonts(item, resultItem));
-        if (item.type === '-' && min > item.value) min = item.value;
+
+        // get min of elemrnts with '-'
+        if (item.type === '-') {
+          if (min === null) min = item.value;
+          if (min > item.value) min = item.value;
+        }
       });
 
       // update loopArr with new values
@@ -325,7 +393,7 @@ function solution(inputData) {
       resultArr = resultArr.filter((item) => !!item);
       resultSum = sumMatrix(resultArr, costMatrix);
 
-      nextOptimum = getNextOptimum(resultArr, costMatrix);
+      nextOptimum = getNextOptimum(type, resultArr, costMatrix);
       moveOnFlag = !!nextOptimum;
     }
 
