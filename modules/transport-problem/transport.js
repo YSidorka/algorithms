@@ -347,6 +347,9 @@ function solution(inputData) {
     let resultArr = northWestCorner([...inputArr], [...outputArr]);
     let resultSum = sumMatrix(resultArr, costMatrix);
 
+    console.log('Base plan sum:', resultSum);
+    console.log('Type opimization:', type);
+
     // get item for optimization
     let nextOptimum = getNextOptimum(type, resultArr, costMatrix);
     let moveOnFlag = !!nextOptimum;
@@ -397,7 +400,6 @@ function solution(inputData) {
       moveOnFlag = !!nextOptimum;
     }
 
-    console.log(resultArr);
     result = setOutput(resultArr, costMatrix);
     return result;
   } catch (err) {
