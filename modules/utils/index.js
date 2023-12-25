@@ -9,33 +9,38 @@ function createNDimArrayRecursion(arrayParams, defaultValue = null) {
   return result;
 }
 
-function getNOD(array) {
+// Greatest Common Divisor (GCD)
+function calculateGCD(array) {
   try {
-    let _array = array;
-    let min = Math.min(..._array);
-    if (!_array.length || !min || min <= 0) return null;
+    if (!Array.isArray(array) || array.length === 0 || Math.min(...array) <= 0) return null;
 
-    while (_array.length) {
-      const tmpArr = [];
-      let tmpMin = min;
+    let remainders = [...array];
+    let gcd = Math.min(...remainders);
 
-      _array.forEach((value) => {
-        const mod = value % min;
+    while (remainders.length > 0) {
+      const updatedRemainders = [];
+      let gcdTmp = gcd;
+
+      // Calculate remainders and update minimum
+      remainders.forEach((value) => {
+        const mod = value % gcd;
+
         if (mod > 0) {
-          if (tmpMin > mod) tmpMin = mod;
-          tmpArr.push(mod);
+          updatedRemainders.push(mod);
+          gcdTmp = Math.min(gcdTmp, mod);
         }
       });
 
-      // update minimum
-      if (tmpArr.length) {
-        tmpArr.push(min);
-        min = tmpMin;
+      // If there are remainders, update the array for the next iteration
+      if (updatedRemainders.length > 0) {
+        updatedRemainders.push(gcd);
+        gcd = gcdTmp
       }
-      _array = tmpArr;
+
+      remainders = updatedRemainders;
     }
 
-    return min;
+    return gcd;
   } catch (err) {
     return null;
   }
@@ -59,7 +64,7 @@ function swap(a, b) {
 
 module.exports = {
   createNDimArray: createNDimArrayRecursion,
-  getNOD,
+  getNOD: calculateGCD,
   arraySum,
   cloneObj,
   swap
