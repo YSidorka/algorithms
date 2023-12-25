@@ -1,4 +1,4 @@
-const { createNDimArray } = require('../utils/utils');
+const { createNDimArray } = require('../utils');
 
 function excludeCase(resultTable, itemIndex, weightIndex) {
   let result = 0;
@@ -31,11 +31,14 @@ function includeUnboundedCase(resultTable, itemIndex, weightIndex, item) {
 
 function solution(inputData) {
   try {
-    let result;
+    // Destructuring assignment for clarity
     const { weight, limit, items } = inputData;
 
-    items.sort((A, B) => (A.weight >= B.weight ? 1 : -1));
-    let resultTable = createNDimArray([items.length, weight + 1]);
+    // Sort items by weight in ascending order
+    items.sort((a, b) => (a.weight >= b.weight ? 1 : -1));
+
+    // Initialize a 2D array for dynamic programming
+    const resultTable = createNDimArray([items.length, weight + 1]);
 
     resultTable.forEach((tableRow, itemIndex) => {
       tableRow.forEach((weight, weightIndex) => {
@@ -60,7 +63,7 @@ function solution(inputData) {
     });
 
     // result = resultTable[items.length - 1][weight];
-    result = resultTable;
+    const result = resultTable;
     return result;
   } catch (err) {
     console.log(err.message);
@@ -68,6 +71,4 @@ function solution(inputData) {
   }
 }
 
-module.exports = {
-  solution
-};
+module.exports = solution;

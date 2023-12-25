@@ -1,4 +1,4 @@
-const { createNDimArray, arraySum, cloneObj, swap } = require('../utils/utils');
+const { createNDimArray, arraySum, cloneObj, swap } = require('../utils');
 
 function inputValidator(data) {
   try {
@@ -209,7 +209,7 @@ function getNextOptimum_MIN(resultArr, costMatrix) {
   return optimumObj;
 }
 
-function isEqualPonts(a, b) {
+function isEqualPoints(a, b) {
   if (a.value !== b.value) return false;
   if (a.row !== b.row) return false;
   if (a.col !== b.col) return false;
@@ -321,7 +321,7 @@ function getLoop(resultArr, index) {
     baseArr = removeSingleItemCases(baseArr);
 
     // update start index;
-    startIndex = baseArr.findIndex((item) => isEqualPonts(item, startItem));
+    startIndex = baseArr.findIndex((item) => isEqualPoints(item, startItem));
     if (startIndex === -1) throw new Error('Invalid startIndex');
 
     // generate routes
@@ -366,7 +366,7 @@ function solution(inputData) {
       let min = null;
       loopArr.forEach((item, index) => {
         item.type = index % 2 === 0 ? '+' : '-';
-        item.index = resultArr.findIndex((resultItem) => isEqualPonts(item, resultItem));
+        item.index = resultArr.findIndex((resultItem) => isEqualPoints(item, resultItem));
 
         // get min of elemrnts with '-'
         if (item.type === '-') {
@@ -408,6 +408,4 @@ function solution(inputData) {
   }
 }
 
-module.exports = {
-  solution
-};
+module.exports = solution;

@@ -1,4 +1,4 @@
-const { createNDimArray, getNOD } = require('../utils/utils');
+const { createNDimArray, getNOD } = require('../utils');
 
 function excludeCase(resultTable, itemIndex, weightIndex) {
   let result = Number.MAX_SAFE_INTEGER;
@@ -97,6 +97,4 @@ function solution(inputData) {
   }
 }
 
-module.exports = {
-  solution
-};
+module.exports = solution;

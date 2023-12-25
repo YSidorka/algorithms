@@ -1,4 +1,4 @@
-const { createNDimArray } = require('../utils/utils');
+const { createNDimArray } = require('../utils');
 
 function inputValidator(inputData) {
   try {
@@ -201,6 +201,4 @@ function solution(inputData) {
   }
 }
 
-module.exports = {
-  solution
-};
+module.exports = solution;
