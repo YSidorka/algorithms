@@ -104,13 +104,13 @@ function setOutput(resultRow, matrix, items, resKeys) {
 function isBasis(matrix, col) {
   try {
     let result = true;
-    let i = 0;
     let nonzeroCount = 0;
-    while (result && i < matrix.length) {
-      if (matrix[i][col] !== 0) nonzeroCount += 1;
+
+    matrix.forEach((row) => {
+      if (row[col] !== 0) nonzeroCount += 1;
       if (nonzeroCount > 1) result = false;
-      i += 1;
-    }
+    });
+
     return result;
   } catch (err) {
     return false;

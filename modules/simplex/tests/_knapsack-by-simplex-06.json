@@ -1,0 +1,28 @@
+{
+  "name": "knapsack (06) by simplex",
+  "input": {
+    "max": "cost",
+    "items": [
+      { "count_1": 1, "weight": 1, "cost": 1, "id": "Item #1" },
+      { "count_2": 1, "weight": 2, "cost": 4, "id": "Item #2" },
+      { "count_3": 1, "weight": 3, "cost": 4, "id": "Item #3" },
+      { "count_4": 1, "weight": 4, "cost": 5, "id": "Item #4" },
+      { "count_5": 1, "weight": 5, "cost": 7, "id": "Item #5" }
+    ],
+    "resources": {
+      "weight": 9,
+      "count_1": 1,
+      "count_2": 1,
+      "count_3": 1,
+      "count_4": 1,
+      "count_5": 1
+    }
+  },
+  "output": {
+    "result": 13,
+    "items": {
+    },
+    "resources": {
+    }
+  }
+}

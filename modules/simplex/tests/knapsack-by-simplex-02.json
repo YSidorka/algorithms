@@ -1,0 +1,35 @@
+{
+  "name": "knapsack (02-unlim) by simplex",
+  "input": {
+    "max": "cost",
+    "items": [
+      { "count_1": 1, "weight": 2, "cost": 1, "id": "Item #1" },
+      { "count_2": 1, "weight": 3, "cost": 2, "id": "Item #2" },
+      { "count_3": 1, "weight": 3, "cost": 1, "id": "Item #3" },
+      { "count_4": 1, "weight": 5, "cost": 7, "id": "Item #4" }
+    ],
+    "resources": {
+      "weight": 10,
+      "count_1": 10,
+      "count_2": 10,
+      "count_3": 10,
+      "count_4": 10
+    }
+  },
+  "output": {
+    "result": 14,
+    "items": {
+      "Item #1": 0,
+      "Item #2": 0,
+      "Item #3": 0,
+      "Item #4": 2
+    },
+    "resources": {
+      "weight": 0,
+      "count_1": 10,
+      "count_2": 10,
+      "count_3": 10,
+      "count_4": 8
+    }
+  }
+}
