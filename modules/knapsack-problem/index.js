@@ -28,6 +28,39 @@ function includeUnboundedCase(resultTable, itemIndex, weightIndex, item) {
   return result;
 }
 
+function setOutput(resultTable, sortedItems, weight) {
+  // RETURN VALUE ONLY
+  // return resultTable[resultTable.length - 1][resultTable[0].length - 1];
+
+  // RETURN RESULT TABLE
+  return resultTable;
+
+  // return solution list
+  let result = {};
+  let rowIndex = resultTable.length - 1;
+  let colIndex = resultTable[0].length - 1;
+  while (rowIndex >= 0) {
+    if (colIndex <= 0) break;
+    while (colIndex > 0) {
+      if (
+        rowIndex >= 1 &&
+        resultTable[rowIndex][colIndex] === resultTable[rowIndex - 1][colIndex]
+      ) {
+        // exclude case
+        rowIndex -= 1;
+      } else {
+        // include case
+        const caseName = sortedItems[rowIndex].name;
+        if (!result[caseName]) result[caseName] = 0;
+        result[caseName] += 1;
+        colIndex -= sortedItems[rowIndex].weight;
+      }
+    }
+  }
+
+  return result;
+}
+
 function solution(inputData) {
   try {
     // Destructuring assignment for clarity
@@ -54,7 +87,7 @@ function solution(inputData) {
     });
 
     // result = resultTable[items.length - 1][weight];
-    const result = resultTable;
+    const result = setOutput(resultTable, items, weight);
     return result;
   } catch (err) {
     console.log(err.message);

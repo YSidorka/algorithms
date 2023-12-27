@@ -4,11 +4,11 @@
     "weight": 9,
     "limit": 1,
     "items": [
-      { "weight": 1, "cost": 1 },
-      { "weight": 2, "cost": 4 },
-      { "weight": 3, "cost": 4 },
-      { "weight": 4, "cost": 5 },
-      { "weight": 5, "cost": 7 }
+      { "weight": 1, "cost": 1, "name": "Item #1" },
+      { "weight": 2, "cost": 4, "name": "Item #2" },
+      { "weight": 3, "cost": 4, "name": "Item #3" },
+      { "weight": 4, "cost": 5, "name": "Item #4" },
+      { "weight": 5, "cost": 7, "name": "Item #5" }
     ]
   },
   "output": [
