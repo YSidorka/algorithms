@@ -66,7 +66,6 @@ function setOutput(resultTable, sortedItems, weight) {
 
 function solution(inputData) {
   try {
-    let result;
     const { weight, limit, items } = setInput(inputData);
 
     items.sort((A, B) => (A.weight >= B.weight ? 1 : -1));
@@ -89,7 +88,7 @@ function solution(inputData) {
       });
     });
 
-    result = setOutput(resultTable, items, weight);
+    const result = setOutput(resultTable, items, weight);
     return result;
   } catch (err) {
     console.log(err.message);

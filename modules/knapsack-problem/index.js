@@ -2,7 +2,6 @@ const { createNDimArray } = require('../utils');
 
 function excludeCase(resultTable, itemIndex, weightIndex) {
   let result = 0;
-
   if (itemIndex >= 1) result = resultTable[itemIndex - 1][weightIndex];
   return result;
 }
@@ -33,6 +32,12 @@ function solution(inputData) {
   try {
     // Destructuring assignment for clarity
     const { weight, limit, items } = inputData;
+    let fn;
+
+    // 0-1 knapsack problem
+    if (!limit || limit === 1) fn = include01Case;
+    // unbounded knapsack problem
+    if (limit === 'unlim') fn = includeUnboundedCase;
 
     // Sort items by weight in ascending order
     items.sort((a, b) => (a.weight >= b.weight ? 1 : -1));
@@ -42,23 +47,9 @@ function solution(inputData) {
 
     resultTable.forEach((tableRow, itemIndex) => {
       tableRow.forEach((weight, weightIndex) => {
-        let exclude;
-        let include;
-
-        // problem cases
-        if (!limit || limit === 1) {
-          // 0-1 knapsack problem
-          exclude = excludeCase(resultTable, itemIndex, weightIndex);
-          include = include01Case(resultTable, itemIndex, weightIndex, items[itemIndex]);
-          tableRow[weightIndex] = Math.max(exclude, include);
-        }
-
-        if (limit === 'unlim') {
-          // unbounded knapsack problem
-          exclude = excludeCase(resultTable, itemIndex, weightIndex);
-          include = includeUnboundedCase(resultTable, itemIndex, weightIndex, items[itemIndex]);
-          tableRow[weightIndex] = Math.max(exclude, include);
-        }
+        const exclude = excludeCase(resultTable, itemIndex, weightIndex);
+        const include = fn(resultTable, itemIndex, weightIndex, items[itemIndex]);
+        tableRow[weightIndex] = Math.max(exclude, include);
       });
     });
 

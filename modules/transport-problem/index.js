@@ -368,7 +368,7 @@ function solution(inputData) {
         item.type = index % 2 === 0 ? '+' : '-';
         item.index = resultArr.findIndex((resultItem) => isEqualPoints(item, resultItem));
 
-        // get min of elemrnts with '-'
+        // get min of elements with '-'
         if (item.type === '-') {
           if (min === null) min = item.value;
           if (min > item.value) min = item.value;

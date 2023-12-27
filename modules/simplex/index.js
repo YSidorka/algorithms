@@ -118,23 +118,13 @@ function isBasis(matrix, col) {
 }
 
 function getMinIndex(array) {
-  let min = array[0];
-  let minIndex = 0;
-
-  array.forEach((item, index) => {
-    if (min > item) {
-      min = item;
-      minIndex = index;
-    }
-  });
-  return minIndex;
+  return array.indexOf(Math.min(...array));
 }
 
 function getFreeElArray(matrix, basisIndex) {
   const result = matrix.map((row) => {
-    let value = row[row.length - 1] / row[basisIndex];
-    if (value < 0) value = Infinity;
-    return value;
+    const value = row[row.length - 1] / row[basisIndex];
+    return (value < 0) ? Infinity : value;
   });
   return result;
 }
@@ -152,7 +142,6 @@ function updateRowWithBasisRow(basisRow, row, basisIndex) {
 
 function solution(inputData) {
   try {
-    let result;
     let { resultRow, matrix, resKeys } = setInput(inputData);
 
     let newBasisColIndex = getMinIndex(resultRow);
@@ -193,7 +182,7 @@ function solution(inputData) {
       }
     }
 
-    result = setOutput(resultRow, matrix, inputData.items, resKeys);
+    const result = setOutput(resultRow, matrix, inputData.items, resKeys);
     return result;
   } catch (err) {
     console.log(err.message);
