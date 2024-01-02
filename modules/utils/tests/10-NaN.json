@@ -1,0 +1,8 @@
+{
+  "name": "10 | NaN [16, 'NaN', 48]",
+  "input": [16, "NaN", 48],
+  "output": {
+    "GCD": null,
+    "LCM": null
+  }
+}

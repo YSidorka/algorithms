@@ -1,0 +1,8 @@
+{
+  "name": "05 | emptyArray []",
+  "input": [],
+  "output": {
+    "GCD": null,
+    "LCM": null
+  }
+}

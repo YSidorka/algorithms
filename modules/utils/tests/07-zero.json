@@ -1,0 +1,8 @@
+{
+  "name": "07 | zero [1, 5, 0]",
+  "input": [1, 5, 0],
+  "output": {
+    "GCD": null,
+    "LCM": null
+  }
+}

@@ -1,4 +1,4 @@
-const { createNDimArray } = require('../utils');
+const { createNDimArray, getGCD, getLCM } = require('../utils');
 
 function inputValidator(inputData) {
   try {
@@ -64,34 +64,57 @@ function setInput(inputData) {
 
     // set free element
     matrix[i][row.length - 1] = resources[resKeys[i]];
+
+    // set zero element
+    matrix[i].unshift(0);
   });
+
+  // set zero element
+  resultRow.unshift(1);
 
   return { resultRow, matrix, resKeys };
 }
 
-function setOutput(resultRow, matrix, items, resKeys) {
-  const _result = resultRow[resultRow.length - 1];
+function setOutput(matrix, items, resKeys) {
+  let _result;
   const _items = {};
   const _resources = {};
 
   matrix[0].forEach((col, colIndex) => {
     if (colIndex === matrix[0].length - 1) return;
+
+    const itemIndex = colIndex - 1;
+    const resourceIndex = colIndex - 1 - items.length;
+
     if (isBasis(matrix, colIndex)) {
-      let rowIndex = matrix.findIndex((row) => row[colIndex] === 1);
+
+      let rowIndex = matrix.findIndex((row) => row[colIndex] !== 0);
       if (rowIndex < 0) return;
+
       // to get result in a basis row -> use the last basis item
-      if (colIndex < items.length) {
-        // items
-        _items[items[colIndex].id] = matrix[rowIndex][matrix[0].length - 1];
+      const basisItem = matrix[rowIndex][colIndex];
+      const lastItem = matrix[rowIndex][matrix[0].length - 1];
+
+      if (colIndex === 0) {
+        // result
+        _result = lastItem / basisItem;
       }
-      if (colIndex >= items.length) {
+
+      if (itemIndex >= 0 && itemIndex < items.length) {
+        // items
+        _items[items[itemIndex].id] = lastItem / basisItem;
+      }
+
+      if (resourceIndex >= 0 && resourceIndex < resKeys.length) {
         // resources
-        _resources[resKeys[colIndex - items.length]] = matrix[rowIndex][matrix[0].length - 1];
+        _resources[resKeys[resourceIndex]] = lastItem / basisItem;
       }
     } else {
       // result for non-basis row = 0
-      if (colIndex < items.length) _items[items[colIndex].id] = 0;
-      if (colIndex >= items.length) _resources[resKeys[colIndex - items.length]] = 0;
+
+      // FYI: colIndex === 0 - is always in basis
+      if (colIndex - 1 < items.length) _items[items[itemIndex].id] = 0;
+      if (colIndex - 1 >= items.length) _resources[resKeys[resourceIndex]] = 0;
     }
   });
   return {
@@ -118,26 +141,68 @@ function isBasis(matrix, col) {
 }
 
 function getMinIndex(array) {
-  return array.indexOf(Math.min(...array));
+  // return array.indexOf(Math.min(...array));
+  const min = Math.min(...array);
+  const result = array.findIndex((item) => item === min);
+  return result;
 }
 
-function getFreeElArray(matrix, basisIndex) {
-  const result = matrix.map((row) => {
-    const value = row[row.length - 1] / row[basisIndex];
-    return (value < 0) ? Infinity : value;
+function getNewBasisRowIndex(matrix, basisColIndex) {
+
+  const freeElArray = matrix.map((row) => {
+    const value = row[row.length - 1] / row[basisColIndex];
+    if (value < 0) {
+      console.log('!!! VALUE < 0 !!!', value);
+    }
+    return (value <= 0) ? Infinity : value;
   });
-  return result;
-}
 
-function rowFactorSimplify(row, k) {
-  const result = row.map((value) => value / k);
-  return result;
+  let min = freeElArray[0];
+  let minIndex = 0;
+
+  freeElArray.forEach((item, index) => {
+    // if (item !== ) {}
+    if (min === item) {
+      if (matrix[minIndex][basisColIndex] > matrix[index][basisColIndex]) {
+        minIndex = index;
+      }
+    }
+    if (min > item) {
+      min = item;
+      minIndex = index;
+    }
+  });
+
+  return minIndex;
 }
 
 function updateRowWithBasisRow(basisRow, row, basisIndex) {
-  const K = -row[basisIndex];
-  const result = row.map((value, index) => value + basisRow[index] * K);
+  const k = (basisRow[basisIndex] * row[basisIndex] > 0) ? -1 : 1;
+  const result = row.map((value, index) => value + basisRow[index] * k);
   return result;
+}
+
+function updateRowWithLCM(row, index, lcm) {
+  const k = Math.abs(lcm / row[index]);
+  return row.map((item) => item * k);
+}
+
+function getRowLCM(matrix, resultRow, basisColIndex) {
+  const array = [resultRow[basisColIndex]];
+
+  matrix.forEach((row) => {
+    if (row[basisColIndex] !== 0) array.push(row[basisColIndex]);
+  });
+
+  const result = getLCM(array);
+  return result;
+}
+
+function updateRowWithGDC(row) {
+  const array = row.filter((item) => item !== 0);
+  const gdc = getGCD(array);
+  if (!gdc) return row;
+  return row.map((item) => item / gdc);
 }
 
 function solution(inputData) {
@@ -150,39 +215,47 @@ function solution(inputData) {
     while (moveOnFlag) {
       moveOnFlag = false;
 
-      const freeElArray = getFreeElArray(matrix, newBasisColIndex);
-      const newBasisRowIndex = getMinIndex(freeElArray);
+      const newBasisRowIndex = getNewBasisRowIndex(matrix, newBasisColIndex);
+      const lcm = getRowLCM(matrix, resultRow, newBasisColIndex);
 
-      // simplify new basis row
-      matrix[newBasisRowIndex] = rowFactorSimplify(
-        matrix[newBasisRowIndex],
-        matrix[newBasisRowIndex][newBasisColIndex]
-      );
-
-      // update matrix
+      // update matrix with LCM
       matrix.forEach((row, index) => {
-        if (index !== newBasisRowIndex) {
-          matrix[index] = updateRowWithBasisRow(matrix[newBasisRowIndex], row, newBasisColIndex);
+        if (row[newBasisColIndex] !== 0) {
+          matrix[index] = updateRowWithLCM(row, newBasisColIndex, lcm);
         }
       });
 
-      // move on criteria
-      const tmpResultRow = updateRowWithBasisRow(
-        matrix[newBasisRowIndex],
-        resultRow,
-        newBasisColIndex
-      );
-      const lastIndex = resultRow.length - 1;
+      // update tmp result array with LCM
+      let resultRowTmp = updateRowWithLCM(resultRow, newBasisColIndex, lcm);
 
-      if (tmpResultRow[lastIndex] > resultRow[lastIndex]) {
+      // update matrix
+      const basisRow = [...matrix[newBasisRowIndex]];
+
+      matrix = matrix.map((row, index) => {
+        if (index !== newBasisRowIndex && row[newBasisColIndex] !== 0) {
+          return updateRowWithBasisRow(basisRow, row, newBasisColIndex);
+        }
+        return row;
+      });
+      resultRowTmp = updateRowWithBasisRow(basisRow, resultRowTmp, newBasisColIndex);
+
+      // update with GDC
+      matrix = matrix.map((row) => updateRowWithGDC(row));
+      resultRowTmp = updateRowWithGDC(resultRowTmp);
+
+      // move on criteria
+      const lastIndex = resultRow.length - 1;
+      if (resultRowTmp[lastIndex] / resultRowTmp[0] > resultRow[lastIndex] / resultRow[0]) {
         // update resultRow
-        resultRow = tmpResultRow;
+        resultRow = resultRowTmp;
         newBasisColIndex = getMinIndex(resultRow);
         moveOnFlag = resultRow[newBasisColIndex] < 0;
       }
     }
 
-    const result = setOutput(resultRow, matrix, inputData.items, resKeys);
+    matrix.push(resultRow);
+
+    const result = setOutput(matrix, inputData.items, resKeys);
     return result;
   } catch (err) {
     console.log(err.message);

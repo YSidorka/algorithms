@@ -1,0 +1,8 @@
+{
+  "name": "06 | strArray '[3, 6]'",
+  "input": "[3, 6]",
+  "output": {
+    "GCD": null,
+    "LCM": null
+  }
+}

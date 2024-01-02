@@ -347,8 +347,8 @@ function solution(inputData) {
     let resultArr = northWestCorner([...inputArr], [...outputArr]);
     let resultSum = sumMatrix(resultArr, costMatrix);
 
-    console.log('Base plan sum:', resultSum);
-    console.log('Type opimization:', type);
+    // console.log('Base plan sum:', resultSum);
+    // console.log('Type opimization:', type);
 
     // get item for optimization
     let nextOptimum = getNextOptimum(type, resultArr, costMatrix);

@@ -1,0 +1,8 @@
+{
+  "name": "11 | Infinity [16, 'Infinity', 48]",
+  "input": [16, "Infinity", 48],
+  "output": {
+    "GCD": null,
+    "LCM": null
+  }
+}

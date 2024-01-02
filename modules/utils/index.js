@@ -10,37 +10,51 @@ function createNDimArrayRecursion(arrayParams, defaultValue = null) {
 }
 
 // Greatest Common Divisor (GCD)
-function calculateGCD(array) {
+function calculateGCD(a, b) {
+  if (!a || !b) return null;
+  while (b !== 0) {
+    const tmp = b;
+    b = a % b;
+    a = tmp;
+  }
+  return Math.abs(a);
+}
+
+function isValidNumberArray(array) {
+  if (!Array.isArray(array) || array.length < 1) return false;
+  if (!array.every((item) => typeof item === 'number')) return false;
+  if (array.includes(0)) return false;
+  if (array.some((item) => !isFinite(item))) return false;
+  if (array.some((item) => isNaN(item))) return false;
+
+  //
+  return true;
+}
+// GCD for array
+function calculateGCDArray(arr) {
   try {
-    if (!Array.isArray(array) || array.length === 0 || Math.min(...array) <= 0) return null;
+    const array = arr.map(Math.abs);
+    if (!isValidNumberArray(array)) return null;
 
-    let remainders = [...array];
-    let gcd = Math.min(...remainders);
-
-    while (remainders.length > 0) {
-      const updatedRemainders = [];
-      let gcdTmp = gcd;
-
-      // Calculate remainders and update minimum
-      remainders.forEach((value) => {
-        const mod = value % gcd;
-
-        if (mod > 0) {
-          updatedRemainders.push(mod);
-          gcdTmp = Math.min(gcdTmp, mod);
-        }
-      });
-
-      // If there are remainders, update the array for the next iteration
-      if (updatedRemainders.length > 0) {
-        updatedRemainders.push(gcd);
-        gcd = gcdTmp
-      }
-
-      remainders = updatedRemainders;
+    let result = array[0];
+    let i = 1;
+    while (result !== 1 && i < array.length) {
+      result = calculateGCD(result, array[i]);
+      i += 1;
     }
 
-    return gcd;
+    return result;
+  } catch (err) {
+    return null;
+  }
+}
+
+// Least Common Multiple (LCM)
+function calculateLCM(arr) {
+  try {
+    const array = arr.map(Math.abs);
+    if (!isValidNumberArray(array)) return null;
+    return array.reduce((lcm, item) => lcm * item / calculateGCD(lcm, item), array[0]);
   } catch (err) {
     return null;
   }
@@ -64,7 +78,8 @@ function swap(a, b) {
 
 module.exports = {
   createNDimArray: createNDimArrayRecursion,
-  getNOD: calculateGCD,
+  getGCD: calculateGCDArray,
+  getLCM: calculateLCM,
   arraySum,
   cloneObj,
   swap

@@ -1,0 +1,27 @@
+{
+  "name": "simplex 05",
+  "input": {
+    "max": "cost",
+    "items": [
+      { "id": "X1", "cost": 1, "res1": 3.5, "res2": 4 },
+      { "id": "X2", "cost": 3, "res1": 7, "res2": 5 },
+      { "id": "X3", "cost": 3, "res1": 4.2, "res2": 8 }
+    ],
+    "resources": {
+      "res1": 1400,
+      "res2": 2000
+    }
+  },
+  "output": {
+    "result": 840,
+    "items": {
+      "X1": 0,
+      "X2": 80,
+      "X3": 200
+    },
+    "resources": {
+      "res1": 0,
+      "res2": 0
+    }
+  }
+}

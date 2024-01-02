@@ -1,4 +1,4 @@
-const { createNDimArray, getNOD } = require('../utils');
+const { createNDimArray, getGCD } = require('../utils');
 
 function excludeCase(resultTable, itemIndex, weightIndex) {
   let result = Number.MAX_SAFE_INTEGER;
@@ -16,18 +16,18 @@ function includeUnboundedCase(resultTable, itemIndex, weightIndex, item) {
   return result;
 }
 
-function setInput(inputData) {
+function setInput(inputData, k = 1000) {
   let { weight, items } = inputData;
-  const nod = getNOD([weight, ...items.map((item) => item.weight)]);
-  if (nod) {
-    weight = Math.floor(weight / nod);
-    items = items.map((item) => {
-      return {
-        ...item,
-        weight: Math.floor(item.weight / nod)
-      };
-    });
-  }
+
+  // set fake GCD
+  weight = weight * k;
+  items = items.map((item) => ({ ...item, weight: item.weight * k }));
+
+  const nod = getGCD([weight, ...items.map((item) => item.weight)]);
+  if (!nod) return { ...inputData };
+
+  weight = weight / nod;
+  items = items.map((item) => ({ ...item, weight: Math.floor(item.weight / nod)}));
   return { ...inputData, weight, items };
 }
 

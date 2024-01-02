@@ -1,0 +1,8 @@
+{
+  "name": "12 | oneItemArray [16]",
+  "input": [16],
+  "output": {
+    "GCD": 16,
+    "LCM": 16
+  }
+}
