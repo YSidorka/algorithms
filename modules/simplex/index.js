@@ -84,37 +84,31 @@ function setOutput(matrix, items, resKeys) {
     if (colIndex === matrix[0].length - 1) return;
 
     const itemIndex = colIndex - 1;
-    const resourceIndex = colIndex - 1 - items.length;
+    const resIndex = colIndex - 1 - items.length;
 
     if (isBasis(matrix, colIndex)) {
 
-      let rowIndex = matrix.findIndex((row) => row[colIndex] !== 0);
+      const rowIndex = matrix.findIndex((row) => row[colIndex] !== 0);
       if (rowIndex < 0) return;
 
       // to get result in a basis row -> use the last basis item
       const basisItem = matrix[rowIndex][colIndex];
       const lastItem = matrix[rowIndex][matrix[0].length - 1];
+      const basisResult = lastItem / basisItem;
 
-      if (colIndex === 0) {
-        // result
-        _result = lastItem / basisItem;
-      }
+      // result
+      if (colIndex === 0) _result = basisResult;
+      // items
+      if (itemIndex >= 0 && itemIndex < items.length) _items[items[itemIndex].id] = basisResult;
+      // resources
+      if (resIndex >= 0 && resIndex < resKeys.length) _resources[resKeys[resIndex]] = basisResult;
 
-      if (itemIndex >= 0 && itemIndex < items.length) {
-        // items
-        _items[items[itemIndex].id] = lastItem / basisItem;
-      }
-
-      if (resourceIndex >= 0 && resourceIndex < resKeys.length) {
-        // resources
-        _resources[resKeys[resourceIndex]] = lastItem / basisItem;
-      }
     } else {
-      // result for non-basis row = 0
+      // result for non-basis row === 0
 
       // FYI: colIndex === 0 - is always in basis
       if (colIndex - 1 < items.length) _items[items[itemIndex].id] = 0;
-      if (colIndex - 1 >= items.length) _resources[resKeys[resourceIndex]] = 0;
+      if (colIndex - 1 >= items.length) _resources[resKeys[resIndex]] = 0;
     }
   });
   return {
@@ -141,19 +135,13 @@ function isBasis(matrix, col) {
 }
 
 function getMinIndex(array) {
-  // return array.indexOf(Math.min(...array));
-  const min = Math.min(...array);
-  const result = array.findIndex((item) => item === min);
-  return result;
+  return array.indexOf(Math.min(...array));
 }
 
 function getNewBasisRowIndex(matrix, basisColIndex) {
 
   const freeElArray = matrix.map((row) => {
     const value = row[row.length - 1] / row[basisColIndex];
-    if (value < 0) {
-      console.log('!!! VALUE < 0 !!!', value);
-    }
     return (value <= 0) ? Infinity : value;
   });
 
@@ -161,9 +149,8 @@ function getNewBasisRowIndex(matrix, basisColIndex) {
   let minIndex = 0;
 
   freeElArray.forEach((item, index) => {
-    // if (item !== ) {}
     if (min === item) {
-      if (matrix[minIndex][basisColIndex] > matrix[index][basisColIndex]) {
+      if (matrix[minIndex][basisColIndex] < matrix[index][basisColIndex]) {
         minIndex = index;
       }
     }
@@ -189,13 +176,10 @@ function updateRowWithLCM(row, index, lcm) {
 
 function getRowLCM(matrix, resultRow, basisColIndex) {
   const array = [resultRow[basisColIndex]];
-
   matrix.forEach((row) => {
     if (row[basisColIndex] !== 0) array.push(row[basisColIndex]);
   });
-
-  const result = getLCM(array);
-  return result;
+  return getLCM(array);
 }
 
 function updateRowWithGDC(row) {
@@ -208,7 +192,6 @@ function updateRowWithGDC(row) {
 function solution(inputData) {
   try {
     let { resultRow, matrix, resKeys } = setInput(inputData);
-
     let newBasisColIndex = getMinIndex(resultRow);
     let moveOnFlag = resultRow[newBasisColIndex] < 0;
 
