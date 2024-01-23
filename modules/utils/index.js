@@ -30,7 +30,7 @@ function isValidNumberArray(array) {
   //
   return true;
 }
-// GCD for array
+// Greatest Common Divisor (GCD) for array
 function calculateGCDArray(arr) {
   try {
     const array = arr.map(Math.abs);
@@ -54,7 +54,7 @@ function calculateLCM(arr) {
   try {
     const array = arr.map(Math.abs);
     if (!isValidNumberArray(array)) return null;
-    return array.reduce((lcm, item) => lcm * item / calculateGCD(lcm, item), array[0]);
+    return array.reduce((lcm, item) => (lcm * item) / calculateGCD(lcm, item), array[0]);
   } catch (err) {
     return null;
   }

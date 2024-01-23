@@ -27,7 +27,7 @@ function setInput(inputData, k = 1000) {
   if (!nod) return { ...inputData };
 
   weight = weight / nod;
-  items = items.map((item) => ({ ...item, weight: Math.floor(item.weight / nod)}));
+  items = items.map((item) => ({ ...item, weight: Math.floor(item.weight / nod) }));
   return { ...inputData, weight, items };
 }
 
@@ -96,4 +96,4 @@ function solution(inputData) {
   }
 }
 
-module.exports = solution;
+module.exports = { solution };

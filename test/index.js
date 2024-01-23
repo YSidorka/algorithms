@@ -11,10 +11,11 @@ function run(fn, arrayPath) {
 
   tests.forEach((item) => {
     const testCase = require(item);
+    const result = fn(testCase.input);
     test(`${testCase.name}`, () => {
-      expect(fn(testCase.input)).toStrictEqual(testCase.output);
+      expect(result).toStrictEqual(testCase.output);
     });
   });
 }
 
-module.exports = run
+module.exports = run;

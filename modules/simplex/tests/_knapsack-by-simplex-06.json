@@ -20,9 +20,7 @@
   },
   "output": {
     "result": 13,
-    "items": {
-    },
-    "resources": {
-    }
+    "items": {},
+    "resources": {}
   }
 }

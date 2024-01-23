@@ -1,0 +1,25 @@
+{
+  "name": "remove node 5",
+  "input": {
+    "nodes": [1, 2, 3, 4, 5, 6],
+    "edges": [
+      { "from": 1, "to": 2, "weight": 0 },
+      { "from": 2, "to": 3, "weight": 0 },
+      { "from": 2, "to": 4, "weight": 0 },
+      { "from": 3, "to": 5, "weight": 0 },
+      { "from": 3, "to": 6, "weight": 0 },
+      { "from": 4, "to": 5, "weight": 0 }
+    ],
+    "nodesToRemove": [5]
+  },
+  "output": {
+    "directed": false,
+    "nodes": [1, 2, 3, 4, 6],
+    "edges": [
+      { "id": "1--2", "from": 1, "to": 2, "weight": 0 },
+      { "id": "2--3", "from": 2, "to": 3, "weight": 0 },
+      { "id": "2--4", "from": 2, "to": 4, "weight": 0 },
+      { "id": "3--6", "from": 3, "to": 6, "weight": 0 }
+    ]
+  }
+}

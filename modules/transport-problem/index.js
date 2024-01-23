@@ -408,4 +408,4 @@ function solution(inputData) {
   }
 }
 
-module.exports = solution;
+module.exports = { solution };

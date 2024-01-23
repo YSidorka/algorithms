@@ -87,7 +87,6 @@ function setOutput(matrix, items, resKeys) {
     const resIndex = colIndex - 1 - items.length;
 
     if (isBasis(matrix, colIndex)) {
-
       const rowIndex = matrix.findIndex((row) => row[colIndex] !== 0);
       if (rowIndex < 0) return;
 
@@ -102,7 +101,6 @@ function setOutput(matrix, items, resKeys) {
       if (itemIndex >= 0 && itemIndex < items.length) _items[items[itemIndex].id] = basisResult;
       // resources
       if (resIndex >= 0 && resIndex < resKeys.length) _resources[resKeys[resIndex]] = basisResult;
-
     } else {
       // result for non-basis row === 0
 
@@ -139,10 +137,9 @@ function getMinIndex(array) {
 }
 
 function getNewBasisRowIndex(matrix, basisColIndex) {
-
   const freeElArray = matrix.map((row) => {
     const value = row[row.length - 1] / row[basisColIndex];
-    return (value <= 0) ? Infinity : value;
+    return value <= 0 ? Infinity : value;
   });
 
   let min = freeElArray[0];
@@ -164,7 +161,7 @@ function getNewBasisRowIndex(matrix, basisColIndex) {
 }
 
 function updateRowWithBasisRow(basisRow, row, basisIndex) {
-  const k = (basisRow[basisIndex] * row[basisIndex] > 0) ? -1 : 1;
+  const k = basisRow[basisIndex] * row[basisIndex] > 0 ? -1 : 1;
   const result = row.map((value, index) => value + basisRow[index] * k);
   return result;
 }
@@ -246,4 +243,4 @@ function solution(inputData) {
   }
 }
 
-module.exports = solution;
+module.exports = { solution };
